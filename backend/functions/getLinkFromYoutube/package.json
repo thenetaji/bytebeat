@@ -1,0 +1,9 @@
+{
+  "name": "getlinkfromyoutube",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "apify-client": "^2.10.0"
+  }
+}
