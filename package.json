@@ -1,0 +1,9 @@
+{
+  "name": "tunevault",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
+}

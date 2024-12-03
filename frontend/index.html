@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- General Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="rgb(0,0,0)" />
+    <link rel="stylesheet" href="./src/styles/index.css" />
+
+    <!-- Site Information -->
+    <meta
+      name="application-name"
+      content="TuneVault is a fast and easy-to-use music downloader that allows you to instantly download your favorite songs from various sources with just a few clicks."
+    />
+    <meta
+      name="description"
+      content="TuneVault is a fast and easy-to-use music downloader that allows you to instantly download your favorite songs from various sources with just a few clicks."
+    />
+    <!-- Page Information -->
+    <meta itemprop="name" content="TuneVault" />
+    <meta
+      itemprop="description"
+      content="TuneVault is a fast and easy-to-use music downloader that allows you to instantly download your favorite songs from various sources with just a few clicks."
+    />
+    <meta name="keywords" content="tunevault,music,downloader" />
+    <!--og tags-->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TuneVault" />
+    <meta
+      property="og:description"
+      content="TuneVault is a fast and easy-to-use music downloader that allows you to instantly download your favorite songs from various sources with just a few clicks."
+    />
+    <meta property="og:image" content="/icons/" />
+    <meta property="og:url" content="" />
+    <meta property="og:url" content="https://tunevaultz.web.app/" />
+    <!--x/twitter tags-->
+    <meta property="twitter:site" content="website" />
+    <meta property="twitter:title" content="TuneVault" />
+    <meta
+      property="twitter:description"
+      content="TuneVault is a fast and easy-to-use music downloader that allows you to instantly download your favorite songs from various sources with just a few clicks."
+    />
+    <meta property="twitter:image" content="/icons/" />
+    <meta property="twitter:url" content="https://tunevaultz.web.app" />
+
+    <!--Link tags-->
+    <link rel="canonical" href="https://tunevaultz.firebaseapp.com" />
+    <link
+      rel="alternate"
+      href="https://tunevaultz.web.app"
+      hreflang="x-default"
+    />
+    <link rel="alternate" href="https://tunevaultz.web.app" hreflang="en" />
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!--Site Validation-->
+    <meta name="google-site-verification" content="" />
+    <meta name="msvalidate.01" content="" />
+    <meta name="yandex-verification" content="" />
+
+    <!--JSON LD-->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "website",
+        "name": "TuneVault",
+        "url": ""
+      }
+    </script>
+    <script type="module" src="./src/scripts/index.js"></script>
+    <title>TuneVault: Download any song, anywhere!</title>
+  </head>
+  <body>
+    <body class="tunevault">
+      <div
+        class="fixed inset-0 -z-10 h-full w-full bg-black bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:14px_24px]"
+      >
+        <div
+          class="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-teal-400 opacity-20 blur-[100px] pulsebg-animation"
+        ></div>
+        <div
+          class="absolute left-60 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-purple-500 opacity-20 blur-[100px] pulsebg-animation"
+        ></div>
+      </div>
+
+      <div id="root" class="relative min-h-screen p-2 space-y-4">
+        <header
+          class="sticky top-0 p-2 z-50 backdrop-blur border border-[rgba(255,255,255,0.2)] rounded-xl"
+        >
+          <div class="flex items-center justify-between max-w-7xl mx-auto px-4">
+            <h1 class="text-3xl font-bold gradient-text">TuneVault</h1>
+            <span class="w-9 hover-scale">
+              <figure>
+                <img src="/images/menu.png" alt="menu-icon" />
+              </figure>
+            </span>
+          </div>
+        </header>
+        <main
+          class="home flex flex-col items-center justify-center max-w-7xl mx-auto px-2"
+        >
+          <section class="hero-section py-14 px-5 mt-5 text-center">
+            <h2
+              class="text-4xl md:text-5xl font-bold mb-6 gradient-text float-animation"
+            >
+              TuneVault: Download any song,anywhere!
+            </h2>
+          </section>
+          <section class="main-logic-section w-full p-1" id="main-logic">
+            <section class="input-state space-y-4">
+              <label for="input-box"></label>
+              <input
+                type="text"
+                placeholder="Enter song name here"
+                class="w-full p-4 rounded-xl placeholder:text-gray-400 dark:text-teal-300 text-white bg-transparent border border-teal-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400 transition-all duration-300 focus:outline-none"
+                id="input-box"
+              />
+              <button
+                class="font-bold text-lg py-3 px-6 rounded-xl w-full bg-gradient-to-r from-teal-400 to-purple-500 text-white hover:opacity-90 transition-all duration-300 pulse-animation"
+                id="submit-button"
+              >
+                Submit
+              </button>
+            </section>
+          </section>
+          <section class="about-site rounded-xl w-full mt-10 p-4 backdrop-blur">
+            <div class="text-gray-100 max-w-4xl mx-auto">
+              <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-center my-8">
+                  Why Choose TuneVault?
+                </h2>
+                <ul class="list-disc list-inside space-y-2 hover-scale">
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/cross-platform.png"
+                      alt="Multi-Platform Support"
+                      class="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <strong>Multi-Platform Support</strong>: Download music
+                      from a variety of platforms.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/fast.png"
+                      alt="Simple and Fast"
+                      class="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <strong>Simple and Fast</strong>: Quick and easy steps to
+                      get your favorite songs.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/unlimited-downloads.png"
+                      alt="Unlimited Downloads"
+                      class="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <strong>Unlimited Downloads</strong>: No restrictions on
+                      the number of downloads.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/high-speed.png"
+                      alt="High-Speed Downloads"
+                      class="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <strong>High-Speed Downloads</strong>: Download music at
+                      fast speeds.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/multi-format.png"
+                      alt="Wide Range of Formats"
+                      class="w-14 rounded-full"
+                    />
+                    <div>
+                      <strong>Wide Range of Formats</strong>: Supports MP3, M4A,
+                      WAV, and other popular formats.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <img
+                      src="/images/no-ad.png"
+                      alt="Free and Ad-Free"
+                      class="h-16 w-16 rounded-full"
+                    />
+                    <div>
+                      <strong>Free and Ad-Free</strong>: Enjoy a smooth user
+                      experience without interruptions.
+                    </div>
+                  </li>
+                </ul>
+              </section>
+
+              <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">
+                  How to Use TuneVault:
+                </h2>
+                <ol class="list-decimal list-inside space-y-2">
+                  <li class="flex items-center space-x-4">
+                    <div><strong>Enter song name</strong>: Enter song name</div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Select Format</strong>: Choose your desired format
+                      (MP3, M4A, etc.).
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Get Link</strong>: Click the "Get Link" button to
+                      generate the download link.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Download</strong>: Click "Download" to save the
+                      song to your device.
+                    </div>
+                  </li>
+                </ol>
+              </section>
+
+              <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">
+                  Frequently Asked Questions:
+                </h2>
+                <ul class="list-disc list-inside space-y-2">
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>What is TuneVault?</strong> A free tool to
+                      download music from various platforms.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Is there a limit on downloads?</strong> No, enjoy
+                      unlimited downloads for free.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Which devices are supported?</strong> Works on
+                      PCs, smartphones, and tablets without additional software.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Where are the downloaded files stored?</strong> In
+                      your device's "Downloads" folder or browser's download
+                      history.
+                    </div>
+                  </li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 class="text-2xl font-semibold mb-4">
+                  Why TuneVault is the Best Choice:
+                </h2>
+                <ul class="list-disc list-inside space-y-2">
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>High-Quality Downloads</strong>: Enjoy
+                      high-quality MP3, M4A, and other formats at fast speeds.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Easy-to-Use Interface</strong>: A simple and
+                      intuitive design for a seamless experience.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Fast Performance</strong>: Quick downloads without
+                      any hassle, even for large files.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>No Hidden Fees</strong>: Enjoy unlimited downloads
+                      without any ads or hidden costs.
+                    </div>
+                  </li>
+                  <li class="flex items-center space-x-4">
+                    <div>
+                      <strong>Always Updated</strong>: Regular improvements to
+                      ensure smooth and reliable service.
+                    </div>
+                  </li>
+                </ul>
+              </section>
+            </div>
+          </section>
+        </main>
+        <footer class="mt-20 border-t border-gray-200 rounded">
+          <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <nav class="flex flex-wrap justify-center gap-6 mb-8">
+              <a
+                href="/src/pages/disclaimer.html"
+                class="text-gray-600 hover:text-cyan-500 transition-colors duration-300 border p-2 rounded"
+                >Disclaimer</a
+              >
+              <a
+                href="/src/pages/about.html"
+                class="text-gray-600 hover:text-cyan-500 transition-colors duration-300 border p-2 rounded"
+                >About</a
+              >
+              <a
+                href="/src/pages/contact.html"
+                class="text-gray-600 hover:text-cyan-500 transition-colors duration-300 border p-2 rounded"
+                >Contact</a
+              >
+            </nav>
+            <p class="text-center text-rose-500 shadow-teal-300">
+              © 2024 TuneVault. All rights reserved
+            </p>
+          </div>
+        </footer>
+      </div>
+    </body>
+  </body>
+  <script type="module" href="./src/scripts/index.js"></script>
+</html>
