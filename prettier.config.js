@@ -1,3 +1,3 @@
 export default {
-  experimentalTernaries: true
+  experimentalTernaries: true,
 };

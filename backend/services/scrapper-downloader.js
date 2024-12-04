@@ -18,7 +18,7 @@ async function downloadBySearch(title, res) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: title }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -40,16 +40,22 @@ async function downloadBySearch(title, res) {
       throw new Error(`Failed to fetch song stream from URL: ${data}`);
     }
 
-    const contentType = songResponse.headers.get("content-type") || "application/octet-stream";
+    const contentType =
+      songResponse.headers.get("content-type") || "application/octet-stream";
     const contentLength = songResponse.headers.get("content-length") || 0;
 
-    console.log("Song stream metadata - Content-Type:", contentType, "Content-Length:", contentLength);
+    console.log(
+      "Song stream metadata - Content-Type:",
+      contentType,
+      "Content-Length:",
+      contentLength,
+    );
 
     res.setHeader("Content-Type", contentType);
     res.setHeader("Content-Length", contentLength);
     res.setHeader(
       "Content-Disposition",
-      `attachment;filename="${getFilename(title, contentType)}"`
+      `attachment;filename="${getFilename(title, contentType)}"`,
     );
 
     const songStream = songResponse.body;
