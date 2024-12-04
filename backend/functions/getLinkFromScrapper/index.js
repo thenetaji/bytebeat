@@ -6,7 +6,8 @@ import { extractAudioLinks } from "./utils.js";
 export const handler = async (event) => {
   console.info("Event received:", JSON.stringify(event));
 
-  const query = event.query;
+  const body = JSON.parse(event.body);
+  const query = body.query;
   if (!query) {
     console.error("No query parameter provided.");
     return {
