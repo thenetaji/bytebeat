@@ -1,7 +1,7 @@
 import resultRenderer from "./render-result.js";
 import loading from "./loading.js";
 
-const API_BASE_URL = "http://localhost:2626/api";
+const API_BASE_URL = "https://tunevault.onrender.com/api";
 
 const fetchMetaContent = async (query) => {
   try {
