@@ -1,28 +1,31 @@
 import dotenv from "dotenv/config";
 import downloadBySearch from "../services/scrapper-downloader.js";
-import downloadByYoutube from "../services/youtube-downloader.js";
+//import { saveDataToTable } from "../db/postgres.js";
 
 /**
  * Handles meta information for a request
  */
+export const GOOGLE_CLOUD_KEY = process.env.GOOGLE_CLOUD_KEY;
 async function metaHandler(req, res) {
   const { query } = req.query;
 
   try {
     console.log("Fetching video metadata for query:", query);
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${process.env.GOOGLE_CLOUD_KEY}`,
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${GOOGLE_CLOUD_KEY}`,
     );
     const data = await response.json();
 
     console.log("Received data from YouTube API:", data);
 
-    const videoItem = await data.items.map((item) => ({
+    const videoItem = await data?.items?.map((item) => ({
       videoId: item.id.videoId,
       title: item.snippet.title,
       thumbnail: item.snippet.thumbnails.high,
       channelTitle: item.snippet.channelTitle,
     }));
+    
+    //await saveDataToTable(videoItem[0]);
 
     console.log("Processed video item:", videoItem);
 
@@ -46,31 +49,10 @@ async function metaHandler(req, res) {
 }
 
 async function downloadHandler(req, res) {
-  const { query, method } = req.query;
-
-  const downloadMethods = {
-    search: downloadBySearch,
-    youtube: downloadByYoutube,
-  };
-
-  console.log("Received download request with method:", method);
-
-  if (!downloadMethods[method]) {
-    console.error("Download method not found:", method);
-    return res.status(400).json({
-      success: false,
-      error: true,
-      message: "Download method is not defined...",
-      data: {},
-    });
-  }
-
-  const downloader = downloadMethods[method];
+  const { query } = req.query;
 
   try {
-    console.log("Starting download with method:", method);
-    await downloader(query, res);
-    console.log("Download completed successfully.");
+    await downloadBySearch(query, res);
   } catch (error) {
     console.error("Error in downloading content", error);
     return res.status(500).json({

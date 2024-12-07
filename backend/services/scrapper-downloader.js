@@ -10,8 +10,10 @@ import { pipeline } from "stream/promises"; // Use promise-based pipeline
 async function downloadBySearch(title, res) {
   try {
     console.log("Fetching song data for title:", title);
-
-    // Simulating the fetch to get the URL of the song (replace with actual API call)
+    
+    /**
+     * Aws lambda URL of function tunevault-getlink-scrapper
+     */
     const response = await fetch(
       "https://hqpaolvrhec65xd7vovltt5tge0rbkxi.lambda-url.ap-south-1.on.aws/",
       {
@@ -32,7 +34,9 @@ async function downloadBySearch(title, res) {
       throw new Error("No song URL returned in response data");
     }
 
-    // Fetch the song stream
+    /**
+     * Fetching the song stream
+     */
     console.log("Fetching the song stream from URL:", data);
     const songResponse = await fetch(data, { redirect: "follow" });
 
@@ -59,8 +63,10 @@ async function downloadBySearch(title, res) {
     );
 
     const songStream = songResponse.body;
-
-    // Use promise-based pipeline
+    
+    /**
+     * Using promise based pipeline
+     */
     await pipeline(songStream, res);
 
     console.log("Song successfully streamed to response.");

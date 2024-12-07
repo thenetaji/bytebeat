@@ -1,12 +1,15 @@
 import { ApifyClient } from "apify-client";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv/config";
-import { extractAudioLinks } from "./utils.js";
+import { extractAudioLinks, extractAndSaveAllLinks } from "./utils.js";
+const APIFY_KEY = process.env.APIFY_KEY;
+export const GOOGLE_CLOUD_KEY = process.env.GOOGLE_CLOUD_KEY;
 
 async function getLinkFromScrapper(event) {
   console.info("Event received:", JSON.stringify(event));
 
-  const query = event.query;
+  const body = JSON.parse(event.body);
+  const query = body.query;
   if (!query) {
     console.error("No query parameter provided.");
     return {
@@ -14,36 +17,28 @@ async function getLinkFromScrapper(event) {
       body: JSON.stringify({ error: "Query parameter is required." }),
     };
   }
-
   console.debug("Query parameter:", query);
 
   try {
     const client = new ApifyClient({
-      token: process.env.APIFY_TOKEN,
+      token: APIFY_KEY,
     });
-
     console.debug("Apify client initialized.");
 
     const input = {
       queries: `download ${query} song 320kbps`,
-      resultsPerPage: 5,
+      resultsPerPage: 20,
       maxPagesPerQuery: 1,
     };
-
     console.debug("Apify actor input:", input);
 
-    /**
-     * Calling the Google scraper
-     * actor on Apify
-     */
     const run = await client.actor("nFJndFXA5zjCTuudP").call(input);
     console.info("Apify actor run started:", run);
 
     const { items } = await client.dataset(run.defaultDatasetId).listItems();
-    console.debug("Dataset items retrieved:", items);
 
     const searchResults = items[0]?.organicResults || [];
-    console.info("Search results found:", searchResults.length);
+    console.info("Search results found:", searchResults);
 
     if (searchResults.length === 0) {
       console.warn("No search results found.");
@@ -53,7 +48,12 @@ async function getLinkFromScrapper(event) {
       };
     }
 
+    /**
+     * Called the utility function 
+       to extract valid link as well as save all links in DB
+     */
     const filteredLinks = await extractAudioLinks(searchResults);
+    await extractAndSaveAllLinks(query,searchResults);
     console.info("Filtered audio links:", filteredLinks);
 
     const formattedUrls = filteredLinks.urls
@@ -61,25 +61,25 @@ async function getLinkFromScrapper(event) {
       .join("\n");
     console.debug("Formatted URLs for generative AI:", formattedUrls);
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+    const genAI = new GoogleGenerativeAI(
+      "AIzaSyCgF0_1uRlK4W4fEo0whGXFPqWfDmMcMIk",
+    );
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    console.debug("Google Generative AI model initialized.");
 
     const prompt = `Extract the highest quality valid download URL from the list below. 
           Ignore links related to ringtones or low-quality songs. Provide only the best valid download URL.
           - Base URL: ${filteredLinks.sourceSite}
           - URLs: ${formattedUrls}
         `;
-
     console.debug("Prompt for generative AI:", prompt);
 
     const result = await model.generateContent(prompt);
     const data = result.response.text();
-    console.info("Generated content received from AI.");
+    console.log("Final Links", data);
 
     return {
-      status: 200,
-      data: data,
+      statusCode: 200,
+      body: JSON.stringify({ data }),
     };
   } catch (error) {
     console.error("Error during processing:", error.message, error.stack);
@@ -90,7 +90,17 @@ async function getLinkFromScrapper(event) {
   }
 }
 
-const event = {
-  query: "binding lights",
-};
-getLinkFromScrapper(event);
+(async () => {
+  const event = {
+    body: JSON.stringify({
+      query: "binding lights",
+    }),
+  };
+
+  try {
+    const response = await getLinkFromScrapper(event);
+    console.log("Response:", response);
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+})();
