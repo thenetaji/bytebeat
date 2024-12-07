@@ -1,6 +1,6 @@
 import dotenv from "dotenv/config";
 import downloadBySearch from "../services/scrapper-downloader.js";
-//import { saveDataToTable } from "../db/postgres.js";
+import { saveDataToTable } from "../db/postgres.js";
 
 /**
  * Handles meta information for a request
@@ -24,8 +24,8 @@ async function metaHandler(req, res) {
       thumbnail: item.snippet.thumbnails.high,
       channelTitle: item.snippet.channelTitle,
     }));
-    
-    //await saveDataToTable(videoItem[0]);
+
+    await saveDataToTable(videoItem[0]);
 
     console.log("Processed video item:", videoItem);
 

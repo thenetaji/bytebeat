@@ -10,7 +10,7 @@ import { pipeline } from "stream/promises"; // Use promise-based pipeline
 async function downloadBySearch(title, res) {
   try {
     console.log("Fetching song data for title:", title);
-    
+
     /**
      * Aws lambda URL of function tunevault-getlink-scrapper
      */
@@ -63,7 +63,7 @@ async function downloadBySearch(title, res) {
     );
 
     const songStream = songResponse.body;
-    
+
     /**
      * Using promise based pipeline
      */

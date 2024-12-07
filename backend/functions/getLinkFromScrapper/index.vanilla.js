@@ -53,7 +53,7 @@ async function getLinkFromScrapper(event) {
        to extract valid link as well as save all links in DB
      */
     const filteredLinks = await extractAudioLinks(searchResults);
-    await extractAndSaveAllLinks(query,searchResults);
+    await extractAndSaveAllLinks(query, searchResults);
     console.info("Filtered audio links:", filteredLinks);
 
     const formattedUrls = filteredLinks.urls

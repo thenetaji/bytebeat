@@ -49,8 +49,8 @@ export async function extractAudioLinks(links) {
 
       const filteredLinks = parsedLinks.filter((link) =>
         [".mp3", ".webm", ".ogg", ".wav", ".flac"].some((word) =>
-          link.href.toLowerCase().includes(word)
-        )
+          link.href.toLowerCase().includes(word),
+        ),
       );
 
       if (filteredLinks.length === 0) continue;
@@ -95,8 +95,8 @@ export async function extractAndSaveAllLinks(query, _totalLinks) {
         const filteredLinks = parsedLinks
           .filter((link) =>
             [".mp3", ".webm", ".ogg", ".wav", ".flac"].some((word) =>
-              link.href.toLowerCase().includes(word)
-            )
+              link.href.toLowerCase().includes(word),
+            ),
           )
           .map((item) => ({
             ...item,
@@ -112,10 +112,11 @@ export async function extractAndSaveAllLinks(query, _totalLinks) {
     const fetchVideoId = async (query) => {
       try {
         const response = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${GOOGLE_CLOUD_KEY}`
+          `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${GOOGLE_CLOUD_KEY}`,
         );
 
-        if (!response.ok) throw new Error(`YouTube API error: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`YouTube API error: ${response.status}`);
 
         const data = await response.json();
         return data?.items[0]?.id?.videoId || null;
