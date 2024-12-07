@@ -16,7 +16,7 @@ const fetchMetaContent = async (query) => {
 };
 
 const downloadContent = (query) => {
-  window.location.href = `${API_BASE_URL}/download?query=${query}&method=search`;
+  window.location.href = `${API_BASE_URL}/download?query=${query}`;
 };
 
 const renderError = (error) => {
@@ -34,7 +34,7 @@ const handleSubmit = async (query) => {
   try {
     loading();
     const data = await fetchMetaContent(query);
-    resultRenderer(query, data.data.videoItem[0]);
+    resultRenderer(data.data.videoItem[0]);
   } catch (error) {
     renderError(error);
     console.error("error in submitting", error);
@@ -43,7 +43,7 @@ const handleSubmit = async (query) => {
 
 const setupEventListeners = () => {
   const submitButton = document.getElementById("submit-button");
-  const inputBox = document.getElementById("input-box");
+  const inputBox = document.getElementById("tunevault-input-box");
 
   submitButton.addEventListener("click", () => {
     const query = inputBox.value.trim();

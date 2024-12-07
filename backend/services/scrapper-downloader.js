@@ -1,5 +1,5 @@
 import { getFilename } from "../utils/filename.js";
-import { pipeline } from "stream/promises"; // Use promise-based pipeline
+import { pipeline } from "stream/promises";
 
 /**
  * Function to download song from scraping search engines
@@ -8,6 +8,7 @@ import { pipeline } from "stream/promises"; // Use promise-based pipeline
  * @returns {Promise<void>} - Resolves after the song is streamed to the response
  */
 async function downloadBySearch(title, res) {
+  const LAMBDA_URL = process.env.LAMBDA_URL;
   try {
     console.log("Fetching song data for title:", title);
 
@@ -15,7 +16,7 @@ async function downloadBySearch(title, res) {
      * Aws lambda URL of function tunevault-getlink-scrapper
      */
     const response = await fetch(
-      "https://hqpaolvrhec65xd7vovltt5tge0rbkxi.lambda-url.ap-south-1.on.aws/",
+      LAMBDA_URL,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -1,7 +1,7 @@
 const mainLogicElement = document.getElementById("main-logic");
 import { downloadContent } from "./index.js";
 
-function renderResult(query, data) {
+function renderResult(data) {
   const thumbnail = data.thumbnail || [];
 
   const innerHtml = `
@@ -44,7 +44,7 @@ function renderResult(query, data) {
 
   function handleDownload(e) {
     e.preventDefault();
-    downloadContent(query);
+    downloadContent(data.title);
   }
 }
 
