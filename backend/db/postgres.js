@@ -2,11 +2,10 @@ import postgres from "postgres";
 import dotenv from "dotenv/config";
 
 const DATABASE_HOST =
-  process.env.DATABASE_HOST ||
-  "ep-muddy-fire-a131930m.ap-southeast-1.pg.koyeb.app";
-const DATABASE_USER = process.env.DATABASE_USER || "koyeb-adm";
-const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD || "KfA7UuxL9aEM";
-const DATABASE_NAME = process.env.DATABASE_NAME || "koyebdb";
+  process.env.DATABASE_HOST;
+const DATABASE_USER = process.env.DATABASE_USER;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
+const DATABASE_NAME = process.env.DATABASE_NAME;
 
 const sql = postgres({
   host: DATABASE_HOST,

@@ -1,0 +1,8 @@
+{
+  "name": "saveToDynamo",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.699.0"
+  }
+}

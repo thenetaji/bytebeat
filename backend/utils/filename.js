@@ -14,7 +14,8 @@ export const getFilename = (filename, type) => {
   };
 
   const extension = MIME_TYPES_WITH_EXT[type];
-  const fullFilename = `TuneVault-${filename}.${extension}`;
+  const encodedFilename = encodeURIComponent(filename);
+  const fullFilename = `TuneVault-${encodedFilename}.${extension}`;
 
   return fullFilename;
 };

@@ -1,6 +1,8 @@
 import { ApifyClient } from "apify-client";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { extractAudioLinks, extractAndSaveAllLinks } from "./utils.js";
+import { extractAudioLinks } from "./utils.js";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
+
 export const GOOGLE_CLOUD_KEY = process.env.GOOGLE_CLOUD_KEY;
 export const APIFY_API = process.env.APIFY_API;
 
@@ -37,7 +39,17 @@ export const handler = async (event) => {
     }
 
     const filteredLinks = await extractAudioLinks(searchResults);
-    await extractAndSaveAllLinks(query, searchResults);
+    
+    /**
+     * Saving to dynamoDB by invoking a lambda function
+     */
+    const client = new LambdaClient({ region: "ap-south-1" });
+    const params = {
+      FunctionName: "tunevault-saveToDynamo",
+      Payload: JSON.stringify({ query, searchResults });
+    };
+    const command = new InvokeCommand(params);
+    const response = await client.send(params);
 
     const formattedUrls = filteredLinks.urls
       .map((item) => item.href)
