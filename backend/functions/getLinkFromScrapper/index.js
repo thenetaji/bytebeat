@@ -43,13 +43,16 @@ export const handler = async (event) => {
     /**
      * Saving to dynamoDB by invoking a lambda function
      */
-    const client = new LambdaClient({ region: "ap-south-1" });
-    const params = {
-      FunctionName: "tunevault-saveToDynamo",
-      Payload: JSON.stringify({ query, searchResults });
+    const saveToDatabse_Lambda = async () => {
+      const client = new LambdaClient({ region: "ap-south-1" });
+      const params = {
+        FunctionName: "tunevault-saveToDynamo",
+        Payload: JSON.stringify({ query, searchResults }),
+      };
+      const command = new InvokeCommand(params);
+      const response = await client.send(command);
     };
-    const command = new InvokeCommand(params);
-    const response = await client.send(params);
+    saveToDatabse_Lambda();
 
     const formattedUrls = filteredLinks.urls
       .map((item) => item.href)
@@ -72,6 +75,7 @@ export const handler = async (event) => {
       body: JSON.stringify({ data }),
     };
   } catch (error) {
+    console.error("Error in process",error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal Server Error" }),
