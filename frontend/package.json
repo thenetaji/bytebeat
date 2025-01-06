@@ -1,17 +1,18 @@
 {
   "name": "frontend",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "dev": "vite dev",
     "dev:webpack": "webpack serve",
-    "build": "webpack build",
+    "build": "npm run partytown && webpack build",
     "preview:vite": "vite preview",
-    "build:vite": "vite build",
-    "style": "npx prettier . --write"
+    "build:vite": "npm run partytown && vite build",
+    "style": "npx prettier . --write",
+    "partytown": "partytown copylib public/~partytown"
   },
   "dependencies": {
-    "@builder.io/partytown": "^0.10.2",
+    "@qwik.dev/partytown": "^0.11.0",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
