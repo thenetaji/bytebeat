@@ -9,43 +9,11 @@ import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
  */
 export const handler = async (event) => {
   const body = JSON.parse(event.body);
-  const { query, searchResults } = body;
+  const { source, links } = body;
   
   let _links = [];
 
   try {
-    for (const link of searchResults) {
-      const currentLink = link.url;
-
-      try {
-        const site = await fetch(currentLink);
-        const response = await site.text();
-        const $ = cheerio.load(response);
-
-        const parsedLinks = [];
-        $("a").each((_, element) => {
-          const href = $(element).attr("href");
-          const title = $(element).text().trim();
-          if (href && title) parsedLinks.push({ href, title });
-        });
-
-        const filteredLinks = parsedLinks
-          .filter((link) =>
-            [".mp3", ".webm", ".ogg", ".wav", ".flac"].some((word) =>
-              link.href.toLowerCase().includes(word),
-            ),
-          )
-          .map((item) => ({
-            ...item,
-            source: new URL(currentLink).origin,
-          }));
-
-        _links.push(...filteredLinks);
-      } catch (siteErr) {
-        console.error(`Error processing site: ${currentLink}`, siteErr);
-      }
-    }
-
     const fetchVideoId = async (query) => {
       try {
         const response = await fetch(
@@ -65,7 +33,7 @@ export const handler = async (event) => {
 
     const videoId = await fetchVideoId(query);
     if (videoId) {
-      await saveToDB(videoId, _links);
+      await saveToDB(videoId, links);
     }
   } catch (err) {
     console.error("Error in parsing and saving:", err);

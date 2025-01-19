@@ -1,22 +1,36 @@
-import dotenv from "dotenv/config";
 import downloadBySearch from "../services/scrapper-downloader.js";
 import { saveDataToTable } from "../db/postgres.js";
+import { logger as log } from "../utils/logger.js";
 
 /**
  * Handles meta information for a request
  */
-export const GOOGLE_CLOUD_KEY = process.env.GOOGLE_CLOUD_KEY;
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+
 async function metaHandler(req, res) {
   const { query } = req.query;
+  log.http({
+    title: "Req received in metaHandler",
+    query,
+  });
+  
+  if(!query){
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: "URL is not provided or invalid",
+      data: {},
+    });
+  }; 
 
   try {
-    console.log("Fetching video metadata for query:", query);
+    
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${GOOGLE_CLOUD_KEY}`,
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}+official+music+video&type=video&videoCategoryId=10&order=relevance&maxResults=1&key=${YOUTUBE_API_KEY}`,
     );
     const data = await response.json();
 
-    console.log("Received data from YouTube API:", data);
+    log.debug("Received data from YouTube API:", data);
 
     const videoItem = await data?.items?.map((item) => ({
       videoId: item.id.videoId,
@@ -27,7 +41,7 @@ async function metaHandler(req, res) {
 
     await saveDataToTable(videoItem[0]);
 
-    console.log("Processed video item:", videoItem);
+    log.verbose("Processed video item:", videoItem);
 
     return res.status(200).json({
       status: true,
@@ -38,7 +52,7 @@ async function metaHandler(req, res) {
       },
     });
   } catch (error) {
-    console.error("Error in fetching meta", error);
+    log.error("Error in fetching meta", error);
     return res.status(500).json({
       success: false,
       error: true,
@@ -50,11 +64,15 @@ async function metaHandler(req, res) {
 
 async function downloadHandler(req, res) {
   const { query } = req.query;
+  log.http({
+    title: "downloadHandler",
+    query,
+  })
 
   try {
     await downloadBySearch(query, res);
   } catch (error) {
-    console.error("Error in downloading content", error);
+    log.error("Error in downloading content", error);
     return res.status(500).json({
       success: false,
       error: true,

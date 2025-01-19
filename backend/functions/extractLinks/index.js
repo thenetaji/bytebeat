@@ -17,6 +17,7 @@ export const handler = async (event) => {
   }
 
   try {
+    console.time("Apify timing");
     const client = new ApifyClient({
       token: APIFY_API,
     });
@@ -27,9 +28,12 @@ export const handler = async (event) => {
       maxPagesPerQuery: 1,
     };
 
-    const run = await client.actor("nFJndFXA5zjCTuudP").call(input);
+    //apify's google search result scrapper actor
+    const run = await client.actor("apify/google-search-scraper").call(input);
     const { items } = await client.dataset(run.defaultDatasetId).listItems();
+    console.timeEnd("Apify timing");
 
+    /**under items it returns many objects but we need organicResults which contains all the search results**/
     const searchResults = items[0]?.organicResults || [];
     if (searchResults.length === 0) {
       return {
@@ -38,44 +42,53 @@ export const handler = async (event) => {
       };
     }
 
+    //extracts all mp3 links
     const filteredLinks = await extractAudioLinks(searchResults);
-    
+
     /**
-     * Saving to dynamoDB by invoking a lambda function
+     * Saving to dynamoDB by invoking a lambda function so as to have a music library
+     * You can skip this or remove this functionality
+     * It calls a lambda whose job is to save to db i used this because if i used here it would slow the application
      */
-    const saveToDatabse_Lambda = async () => {
+    const saveToDatabse_Lambda = async (filteredLinks) => {
+      console.time("DB saving time");
       const client = new LambdaClient({ region: "ap-south-1" });
       const params = {
         FunctionName: "tunevault-saveToDynamo",
-        Payload: JSON.stringify({ query, searchResults }),
+        Payload: JSON.stringify({
+          source: filteredLinks.sourceSite,
+          links: filteredLinks,
+        }),
       };
       const command = new InvokeCommand(params);
       const response = await client.send(command);
+      console.timeEnd("DB saving time");
     };
-    saveToDatabse_Lambda();
+    saveToDatabse_Lambda(filteredLinks);
 
     const formattedUrls = filteredLinks.urls
       .map((item) => item.href)
       .join("\n");
 
+    //get your api key at google ai studio for free
+    console.time("AI timing");
     const genAI = new GoogleGenerativeAI(GOOGLE_CLOUD_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `Extract the highest quality valid download URL from the list below. 
-          Ignore links related to ringtones or low-quality songs. Provide only the best valid download URL.
-          - Base URL: ${filteredLinks.sourceSite}
-          - URLs: ${formattedUrls}
-        `;
+    const prompt = `Please extract the highest quality valid download URL from the list provided. Ignore lower quality options and return only the best valid download URL.
+    Base URL: ${filteredLinks.sourceSite}
+    URLs: ${formattedUrls}`;
 
     const result = await model.generateContent(prompt);
     const data = result.response.text();
+    console.timeEnd("AI timing");
 
     return {
       statusCode: 200,
       body: JSON.stringify({ data }),
     };
   } catch (error) {
-    console.error("Error in process",error);
+    console.error("Error in process", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal Server Error" }),

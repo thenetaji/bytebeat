@@ -1,5 +1,6 @@
 import { getFilename } from "../utils/filename.js";
 import { pipeline } from "stream/promises";
+import { logger as log } from "../utils/logger.js";
 
 /**
  * Function to download song from scraping search engines
@@ -10,10 +11,11 @@ import { pipeline } from "stream/promises";
 async function downloadBySearch(title, res) {
   const LAMBDA_URL = process.env.LAMBDA_URL;
   try {
-    console.log("Fetching song data for title:", title);
+    log.debug("Fetching song data for title:", title);
 
     /**
      * Aws lambda URL of function tunevault-getlink-scrapper
+     * see in function folder named `getLinkFromScrapper`
      */
     const response = await fetch(
       LAMBDA_URL,
@@ -29,7 +31,7 @@ async function downloadBySearch(title, res) {
     }
 
     const { data } = await response.json();
-    console.log("Received song URL data:", data);
+    log.info("Received song URL data:", data);
 
     if (!data) {
       throw new Error("No song URL returned in response data");
@@ -38,7 +40,7 @@ async function downloadBySearch(title, res) {
     /**
      * Fetching the song stream
      */
-    console.log("Fetching the song stream from URL:", data);
+    log.verbose("Fetching the song stream from URL:", data);
     const songResponse = await fetch(data, { redirect: "follow" });
 
     if (!songResponse.ok) {
@@ -70,9 +72,9 @@ async function downloadBySearch(title, res) {
      */
     await pipeline(songStream, res);
 
-    console.log("Song successfully streamed to response.");
+    log.info("Song successfully streamed to response.");
   } catch (error) {
-    console.error("Error in downloadBySearch:", error.message);
+    log.error("Error in downloadBySearch:", error.message);
     return res.status(500).json({
       success: false,
       error: true,

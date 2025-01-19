@@ -1,5 +1,0 @@
-# ENV:
-
-# GOOGLE_CLOUD_KEY
-
-# APIFY_KEY

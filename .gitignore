@@ -14,6 +14,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
 # Environment variables
 .env.local
@@ -43,3 +44,4 @@ dist/
 
 # Custom
 package-lock.json
+*.zip

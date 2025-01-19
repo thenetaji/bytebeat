@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import dotenv from "dotenv/config";
+import { logger as log } from "../utils/logger.js";
 
 const DATABASE_HOST =
   process.env.DATABASE_HOST;
@@ -29,8 +29,8 @@ export const saveDataToTable = async (item) => {
         thumbnail = EXCLUDED.thumbnail,
         channelTitle = EXCLUDED.channelTitle;
     `;
-    console.info("Data saved to DB (inserted or updated)");
+    log.info("Data saved to DB (inserted or updated)");
   } catch (error) {
-    console.error("An error occurred in saving data to DB", error);
+    log.error("An error occurred in saving data to DB", error);
   }
 };

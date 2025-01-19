@@ -1,8 +1,0 @@
-node_modules/
-*.md
-LICENSE
-README.md
-*.log
-*.test.js
-tests/
-docs/
